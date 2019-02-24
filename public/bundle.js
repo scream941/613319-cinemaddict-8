@@ -107,7 +107,7 @@ const filmsList = document.querySelector(`.films-list`);
 const filmsMainContainer = filmsList.querySelector(`.films-list__container`);
 const filmsTopRated = document.querySelector(`section:nth-of-type(2) .films-list__container`);
 const filmsMostComment = document.querySelector(`section:nth-of-type(3) .films-list__container`);
-let isActive = false;
+let isOpened = false;
 
 const renderMainFilmCards = (count) => {
   filmsMainContainer.innerHTML = ``;
@@ -121,26 +121,24 @@ const renderExtraFilmCards = (dist) => {
 };
 
 function open(e) {
-  const opened = filmsMainContainer.querySelector(`.main-navigation__item--active`);
+  const opened = filterContainer.querySelector(`.main-navigation__item--active`);
   if (e.target.classList.contains(`main-navigation__item`)) {
-    if (isOpened) {
-      if (opened !== e.target) {
-        opened.classList.remove(`main-navigation__item--active`);
-        e.target.classList.add(`main-navigation__item--active`);
-        isOpened = true;
-        renderMainFilmCards(4);
-      } else if (opened === e.target) {
-        e.target.classList.remove(`main-navigation__item--active`);
-        isOpened = false;
-      }
-    } else {
+    if (!isOpened) {
       e.target.classList.add(`main-navigation__item--active`);
       isOpened = true;
       renderMainFilmCards(4);
     }
+    if (opened !== e.target) {
+      opened.classList.remove(`main-navigation__item--active`);
+      e.target.classList.add(`main-navigation__item--active`);
+      isOpened = true;
+      renderMainFilmCards(4);
+    } else if (opened === e.target) {
+      e.target.classList.remove(`main-navigation__item--active`);
+      isOpened = false;
+    }
   }
 }
-
 
 filterContainer.insertAdjacentHTML(`afterbegin`, Object(_make_filter_js__WEBPACK_IMPORTED_MODULE_0__["default"])(`History`, true, 6));
 filterContainer.insertAdjacentHTML(`afterbegin`, Object(_make_filter_js__WEBPACK_IMPORTED_MODULE_0__["default"])(`Favorites`, true, 4));
@@ -151,7 +149,7 @@ renderMainFilmCards(7);
 renderExtraFilmCards(filmsTopRated);
 renderExtraFilmCards(filmsMostComment);
 
-filmsMainContainer.addEventListener(`click`, open);
+filterContainer.addEventListener(`click`, open);
 
 
 /***/ }),

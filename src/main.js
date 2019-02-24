@@ -23,20 +23,19 @@ const renderExtraFilmCards = (dist) => {
 function open(e) {
   const opened = filterContainer.querySelector(`.main-navigation__item--active`);
   if (e.target.classList.contains(`main-navigation__item`)) {
-    if (isOpened) {
-      if (opened !== e.target) {
-        opened.classList.remove(`main-navigation__item--active`);
-        e.target.classList.add(`main-navigation__item--active`);
-        isOpened = true;
-        renderMainFilmCards(4);
-      } else if (opened === e.target) {
-        e.target.classList.remove(`main-navigation__item--active`);
-        isOpened = false;
-      }
-    } else {
+    if (!isOpened) {
       e.target.classList.add(`main-navigation__item--active`);
       isOpened = true;
       renderMainFilmCards(4);
+    }
+    if (opened !== e.target) {
+      opened.classList.remove(`main-navigation__item--active`);
+      e.target.classList.add(`main-navigation__item--active`);
+      isOpened = true;
+      renderMainFilmCards(4);
+    } else if (opened === e.target) {
+      e.target.classList.remove(`main-navigation__item--active`);
+      isOpened = false;
     }
   }
 }
