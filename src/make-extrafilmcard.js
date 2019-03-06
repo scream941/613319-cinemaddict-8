@@ -1,4 +1,4 @@
-import random from './random.js';
+import {random} from './random.js';
 
 export default (film) => `<article class="film-card film-card--no-controls">
   <h3 class="film-card__title">${film.title}</h3>

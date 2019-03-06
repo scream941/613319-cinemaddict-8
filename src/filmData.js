@@ -1,4 +1,4 @@
-import random from './random.js';
+import {random} from './random.js';
 
 export default () => ({
   title: [
@@ -16,7 +16,7 @@ export default () => ({
     `Goodfellas`,
     `Se7en`
   ][random(13)],
-  rating: random(10).toFixed(1),
+  rating: (Math.random() * (10 - 5) + 5).toFixed(1),
   year: random(2018, 1950),
   genre: new Set([
     `Action`,
@@ -37,7 +37,7 @@ export default () => ({
     `Sed sed nisi sed augue convallis suscipit in sed felis.`,
     `Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus.`,
     `In rutrum ac purus sit amet tempus.`
-  ].sort((a, b) => Math.random() - 0.5).slice(0, 4).join(` `),
+  ].sort(() => Math.random() - 0.5).slice(0, 4).join(` `),
   amountOfComments: random(99),
   duration: `${random(3, 1)}h ${random(60, 1)}m`,
   poster: [
