@@ -1,4 +1,4 @@
-import {random} from './random.js';
+import {random} from './utilites.js';
 
 export default () => ({
   title: [
