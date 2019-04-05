@@ -1,7 +1,9 @@
-import {createElement} from './utilites.js';
+import Component from './Component.js';
+import {ramdom} from './utilites.js';
 
-export default class FilmExtraCard {
+export default class FilmExtraCard extends Component {
   constructor(data) {
+    super();
     this._title = data.title,
     this._rating = data.rating,
     this._year = data.year,
@@ -9,7 +11,6 @@ export default class FilmExtraCard {
     this._genre = data.genre,
     this._poster = data.poster,
     this._amountOfComments = data.amountOfComments;
-    this._element = null;
   }
   get template() {
     return `<article class="film-card film-card--no-controls">
@@ -25,11 +26,6 @@ export default class FilmExtraCard {
 
       <button class="film-card__comments">${this._amountOfComments} comments</button>
     </article>`;
-  }
-  render() {
-    this._element = createElement(this.template);
-    this.setListener();
-    return this._element;
   }
   setListener() {
   }
