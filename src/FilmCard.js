@@ -1,7 +1,10 @@
-import {createElement, random} from './utilites.js';
+import Component from './Component.js';
+import {random} from './utilites.js';
 
-export default class FilmCard {
+
+export default class FilmCard extends Component {
   constructor(data) {
+    super();
     this._title = data.title,
     this._rating = data.rating,
     this._year = data.year,
@@ -10,7 +13,6 @@ export default class FilmCard {
     this._amountOfComments = data.amountOfComments,
     this._duration = data.duration,
     this._poster = data.poster,
-    this._element = null,
     this._onClick = null,
     this._onClickClick = this._onClickClick.bind(this);
   }
@@ -41,11 +43,6 @@ export default class FilmCard {
         <button class="film-card__controls-item button film-card__controls-item--favorite"><!--Mark as favorite-->FAV</button>
       </form>
     </article>`;
-  }
-  render() {
-    this._element = createElement(this.template);
-    this.setListener();
-    return this._element;
   }
   setListener() {
     this._element.querySelector(`.film-card__comments`)
