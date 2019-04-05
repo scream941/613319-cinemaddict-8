@@ -12,13 +12,48 @@ export default class Popup extends Component {
     this._amountOfComments = data.amountOfComments,
     this._duration = data.duration,
     this._poster = data.poster,
+    this._comments = [`dsdsdsd`, `fsdfs`, `fdasfa`],
+    this._clientEmoji = `😐`,
+    this._emoji = {
+      sleeping: `😴`,
+      neutral: `😐`,
+      grinning: `😀`
+    },
+    this._clientRating = `8`,
     this._onClose = null,
     this._onCloseButtonClick = this._onCloseButtonClick.bind(this);
   }
-  _onCloseButtonClick() {
-    if (typeof this._onClose === `function`) {
-      this._onClose();
+  _processForm(formData) {
+    const entry = {
+      clientEmoji: ``,
+      comments: this._comments,
+      clientRating: ``,
+      emoji: {
+        sleeping: `😴`,
+        neutral: `😐`,
+        grinning: `😀`
+      }
+    };
+    const popupMapper = Popup.createMapper(entry);
+    for (const pair of formData.entries()) {
+      const [property, value] = pair;
+      if (popupMapper[property]) {
+        popupMapper[property](value);
+      }
     }
+    return entry;
+  }
+  _onCloseButtonClick(evt) {
+    evt.preventDefault();
+    const formData = new FormData(this._element.querySelector(`.film-details__inner`));
+    const newData = this._processForm(formData);
+    if (typeof this._onClose === `function`) {
+      this._onClose(newData);
+    }
+    this.update(newData);
+  }
+  _partialUpdate() {
+    this._element.innerHTML = this.template;
   }
   set onClose(fn) {
     this._onClose = fn;
@@ -45,7 +80,7 @@ export default class Popup extends Component {
 
               <div class="film-details__rating">
                 <p class="film-details__total-rating">${this._rating}</p>
-                <p class="film-details__user-rating">Your rate 8</p>
+                <p class="film-details__user-rating">Your rate ${this._clientRating}</p>
               </div>
             </div>
 
@@ -102,32 +137,29 @@ export default class Popup extends Component {
           <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._amountOfComments}</span></h3>
 
           <ul class="film-details__comments-list">
-            <li class="film-details__comment">
-              <span class="film-details__comment-emoji">😴</span>
+          ${this._comments.map((comment) => {
+    return `<li class="film-details__comment">
+              <span class="film-details__comment-emoji">${this._clientEmoji}</span>
               <div>
-                <p class="film-details__comment-text">So long-long story, boring!</p>
+                <p class="film-details__comment-text">${comment}</p>
                 <p class="film-details__comment-info">
                   <span class="film-details__comment-author">Tim Macoveev</span>
                   <span class="film-details__comment-day">3 days ago</span>
                 </p>
               </div>
-            </li>
+            </li>`;
+  }).join(``)}
           </ul>
-
           <div class="film-details__new-comment">
             <div>
               <label for="add-emoji" class="film-details__add-emoji-label">😐</label>
               <input type="checkbox" class="film-details__add-emoji visually-hidden" id="add-emoji">
 
               <div class="film-details__emoji-list">
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-                <label class="film-details__emoji-label" for="emoji-sleeping">😴</label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-neutral-face" value="neutral-face" checked>
-                <label class="film-details__emoji-label" for="emoji-neutral-face">😐</label>
-
-                <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-grinning" value="grinning">
-                <label class="film-details__emoji-label" for="emoji-grinning">😀</label>
+              ${Object.entries(this._emoji).map(([name, pic]) => {
+    return `<input class="film-details__emoji-item visually-hidden" name="comment_emoji" type="radio" id="emoji-${name}" value="${name}">
+                <label class="film-details__emoji-label" for="emoji-${name}">${pic}</label>`;
+  }).join(``)}
               </div>
             </div>
             <label class="film-details__comment-label">
@@ -195,5 +227,23 @@ export default class Popup extends Component {
   removeListener() {
     this._element.querySelector(`.film-details__close-btn`)
       .removeEventListener(`click`, this._onCloseButtonClick);
+  }
+  update(data) {
+    this._clientEmoji = data.clientEmoji,
+    this._comments = data.comments,
+    this._clientRating = data.clientRating;
+  }
+  static createMapper(target) {
+    return {
+      score: (value) => {
+        target.clientRating = value;
+      },
+      comment: (value) => {
+        target.comments.push(value);
+      },
+      comment_emoji: (value) => {
+        target.clientEmoji = target.emoji.value;
+      }
+    };
   }
 }
