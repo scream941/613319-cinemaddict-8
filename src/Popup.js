@@ -144,11 +144,11 @@ export default class Popup extends Component {
 
           <div class="film-details__user-score">
             <div class="film-details__user-rating-poster">
-              <img src="images/posters/blackmail.jpg" alt="film-poster" class="film-details__user-rating-img">
+              <img src="${this._poster}" alt="film-poster" class="film-details__user-rating-img">
             </div>
 
             <section class="film-details__user-rating-inner">
-              <h3 class="film-details__user-rating-title">Incredibles 2</h3>
+              <h3 class="film-details__user-rating-title">${this._title}</h3>
 
               <p class="film-details__user-rating-feelings">How you feel it?</p>
 
