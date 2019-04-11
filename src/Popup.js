@@ -12,27 +12,16 @@ export default class Popup extends Component {
     this._amountOfComments = data.amountOfComments,
     this._duration = data.duration,
     this._poster = data.poster,
-    this._comments = [`dsdsdsd`, `fsdfs`, `fdasfa`],
-    this._clientEmoji = `😐`,
-    this._emoji = {
-      sleeping: `😴`,
-      neutral: `😐`,
-      grinning: `😀`
-    },
+    this._comments = data.comments,
+    this._emoji = data.emoji,
     this._clientRating = `8`,
     this._onClose = null,
     this._onCloseButtonClick = this._onCloseButtonClick.bind(this);
   }
   _processForm(formData) {
     const entry = {
-      clientEmoji: ``,
       comments: this._comments,
       clientRating: ``,
-      emoji: {
-        sleeping: `😴`,
-        neutral: `😐`,
-        grinning: `😀`
-      }
     };
     const popupMapper = Popup.createMapper(entry);
     for (const pair of formData.entries()) {
@@ -137,11 +126,11 @@ export default class Popup extends Component {
           <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${this._amountOfComments}</span></h3>
 
           <ul class="film-details__comments-list">
-          ${this._comments.map((comment) => {
+          ${this._comments.map(({text, emoji}) => {
     return `<li class="film-details__comment">
-              <span class="film-details__comment-emoji">${this._clientEmoji}</span>
+              <span class="film-details__comment-emoji">${emoji}</span>
               <div>
-                <p class="film-details__comment-text">${comment}</p>
+                <p class="film-details__comment-text">${text}</p>
                 <p class="film-details__comment-info">
                   <span class="film-details__comment-author">Tim Macoveev</span>
                   <span class="film-details__comment-day">3 days ago</span>
@@ -229,7 +218,6 @@ export default class Popup extends Component {
       .removeEventListener(`click`, this._onCloseButtonClick);
   }
   update(data) {
-    this._clientEmoji = data.clientEmoji,
     this._comments = data.comments,
     this._clientRating = data.clientRating;
   }
@@ -238,11 +226,12 @@ export default class Popup extends Component {
       score: (value) => {
         target.clientRating = value;
       },
+
       comment: (value) => {
-        target.comments.push(value);
+        target.comments.text = value;
       },
       comment_emoji: (value) => {
-        target.clientEmoji = target.emoji.value;
+        target.comments.emoji = target.emoji.value;
       }
     };
   }

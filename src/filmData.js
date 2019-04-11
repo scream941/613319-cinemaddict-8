@@ -47,5 +47,16 @@ export default () => ({
     `images/posters/fuga-da-new-york.jpg`,
     `images/posters/moonrise.jpg`,
     `images/posters/three-friends.jpg`,
-  ][random(6)]
+  ][random(6)],
+  emoji: {
+    sleeping: `😴`,
+    neutral: `😐`,
+    grinning: `😀`
+  },
+  comments: [
+    {
+      text: `So long-long story, boring!`,
+      emoji: `😴`
+    }
+  ]
 });
