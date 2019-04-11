@@ -22,6 +22,11 @@ export default class Component {
     this.removeListener();
     this._element = null;
   }
+  rerender() {
+    this.removeListener();
+    this._partialUpdate();
+    this.setListener();
+  }
   setListener() {}
   removeListener() {}
 }

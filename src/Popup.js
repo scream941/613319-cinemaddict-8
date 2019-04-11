@@ -22,6 +22,18 @@ export default class Popup extends Component {
     this._onCloseButtonClick = this._onCloseButtonClick.bind(this);
     this._onCommentAdd = this._onCommentAdd.bind(this);
   }
+  _changeEmoji(emojiName) {
+    switch (emojiName) {
+      case `sleeping`:
+        return `😴`;
+      case `grinning`:
+        return `😀`;
+      case `neutral-face`:
+        return `😐`;
+      default:
+        return `😐`;
+    }
+  }
   _processForm(formData) {
     const entry = {
       comment: {
@@ -57,7 +69,6 @@ export default class Popup extends Component {
       if (typeof this._onComment === `function`) {
         this._onComment(newData);
       }
-      this.update(newData);
     }
   }
   _partialUpdate() {
@@ -150,7 +161,7 @@ export default class Popup extends Component {
           <ul class="film-details__comments-list">
           ${this._comments.map(({text, emoji}) => {
     return `<li class="film-details__comment">
-              <span class="film-details__comment-emoji">${emoji}</span>
+              <span class="film-details__comment-emoji">${this._changeEmoji(emoji)}</span>
               <div>
                 <p class="film-details__comment-text">${text}</p>
                 <p class="film-details__comment-info">

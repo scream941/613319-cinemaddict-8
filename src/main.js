@@ -39,6 +39,7 @@ const renderFilms = (dist, listOfFilms) => {
     };
     popup.onComment = (newComment) => {
       filmCard._comments.push(newComment.comment);
+      popup.rerender();
     };
     dist.appendChild(filmCard.render());
   }

@@ -56,7 +56,7 @@ export default () => ({
   comments: [
     {
       text: `So long-long story, boring!`,
-      emoji: `😴`
+      emoji: `sleeping`
     }
   ]
 });
