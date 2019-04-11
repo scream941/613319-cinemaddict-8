@@ -37,6 +37,9 @@ const renderFilms = (dist, listOfFilms) => {
       popup._element.remove();
       popup.unrender();
     };
+    popup.onComment = (newComment) => {
+      filmCard._comments.push(newComment.comment);
+    };
     dist.appendChild(filmCard.render());
   }
 };

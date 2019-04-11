@@ -13,6 +13,7 @@ export default class FilmCard extends Component {
     this._amountOfComments = data.amountOfComments,
     this._duration = data.duration,
     this._poster = data.poster,
+    this._comments = data.comments,
     this._onClick = null,
     this._onClickClick = this._onClickClick.bind(this);
   }

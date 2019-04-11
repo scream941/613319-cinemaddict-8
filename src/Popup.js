@@ -1,6 +1,8 @@
 import {random} from './utilites.js';
 import Component from './Component.js';
 
+const KEYCODE_ENTER = 13;
+
 export default class Popup extends Component {
   constructor(data) {
     super();
@@ -16,11 +18,16 @@ export default class Popup extends Component {
     this._emoji = data.emoji,
     this._clientRating = `8`,
     this._onClose = null,
+    this._onComment = null,
     this._onCloseButtonClick = this._onCloseButtonClick.bind(this);
+    this._onCommentAdd = this._onCommentAdd.bind(this);
   }
   _processForm(formData) {
     const entry = {
-      comments: this._comments,
+      comment: {
+        text: ``,
+        emoji: ``
+      },
       clientRating: ``,
     };
     const popupMapper = Popup.createMapper(entry);
@@ -41,8 +48,23 @@ export default class Popup extends Component {
     }
     this.update(newData);
   }
+  _onCommentAdd(evt) {
+    if (evt.ctrlKey && evt.keyCode === KEYCODE_ENTER) {
+      evt.preventDefault();
+      const formData = new FormData(this._element.querySelector(`.film-details__inner`));
+      const newData = this._processForm(formData);
+
+      if (typeof this._onComment === `function`) {
+        this._onComment(newData);
+      }
+      this.update(newData);
+    }
+  }
   _partialUpdate() {
     this._element.innerHTML = this.template;
+  }
+  set onComment(fn) {
+    this._onComment = fn;
   }
   set onClose(fn) {
     this._onClose = fn;
@@ -212,13 +234,19 @@ export default class Popup extends Component {
   setListener() {
     this._element.querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, this._onCloseButtonClick);
+    this._element.querySelector(`.film-details__comment-input`)
+      .addEventListener(`keydown`, this._onCommentAdd);
   }
   removeListener() {
     this._element.querySelector(`.film-details__close-btn`)
       .removeEventListener(`click`, this._onCloseButtonClick);
+    this._element.querySelector(`.film-details__comment-input`)
+      .removeEventListener(`keydown`, this._onCommentAdd);
   }
   update(data) {
-    this._comments = data.comments,
+    if (data.comments) {
+      this._comments = data.comments;
+    }
     this._clientRating = data.clientRating;
   }
   static createMapper(target) {
@@ -226,12 +254,11 @@ export default class Popup extends Component {
       score: (value) => {
         target.clientRating = value;
       },
-
       comment: (value) => {
-        target.comments.text = value;
+        target.comment.text = value;
       },
       comment_emoji: (value) => {
-        target.comments.emoji = target.emoji.value;
+        target.comment.emoji = value;
       }
     };
   }
