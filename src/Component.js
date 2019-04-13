@@ -20,8 +20,13 @@ export default class Component {
   }
   unrender() {
     this.removeListener();
+    this._element.remove();
     this._element = null;
   }
+  _partialUpdate() {
+    this._element.innerHTML = this.template;
+  }
+  update() {}
   setListener() {}
   removeListener() {}
 }

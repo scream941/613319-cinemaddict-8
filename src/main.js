@@ -1,8 +1,6 @@
 import makeFilter from './make-filter.js';
 import getFilm from './filmData.js';
-import {random, simpleCicle} from './utilites.js';
 import FilmCard from './FilmCard.js';
-import FilmExtraCard from './FilmExtraCard.js';
 import Popup from './Popup.js';
 
 const filterContainer = document.querySelector(`.main-navigation`);
@@ -12,60 +10,61 @@ const filmsTopRated = document.querySelector(`section:nth-of-type(2) .films-list
 const filmsMostComment = document.querySelector(`section:nth-of-type(3) .films-list__container`);
 let isOpened = false;
 
-
 filmsMainContainer.innerHTML = ``;
 filmsTopRated.innerHTML = ``;
 filmsMostComment.innerHTML = ``;
 
+const renderFilmCards = (amount, dist, extra) => {
+  const fragment = document.createDocumentFragment();
+  for (let i = 0; i < amount; i++) {
+    const filmData = getFilm();
+    const filmComponent = new FilmCard(filmData, extra);
+    const popupComponent = new Popup(filmData);
 
-const listOfMainFilms = [];
-const listOfTopRatedFilms = [];
-const listOfMostCommentFilms = [];
-simpleCicle(listOfMainFilms, 7, getFilm);
-simpleCicle(listOfTopRatedFilms, 2, getFilm);
-simpleCicle(listOfMostCommentFilms, 3, getFilm);
-
-
-const renderFilms = (dist, listOfFilms) => {
-  for (const film of listOfFilms) {
-    const filmCard = new FilmCard(film);
-    filmCard.onClick = () => {
-      document.body.appendChild(popup.render());
+    filmComponent.onComments = () => {
+      popupComponent.render();
+      document.body.appendChild(popupComponent.element);
     };
-    const popup = new Popup(film);
-    popup.onClose = () => {
-      popup._element.remove();
-      popup.unrender();
+
+    popupComponent.onClose = () => {
+      document.body.removeChild(popupComponent.element);
+      popupComponent.unrender();
     };
-    dist.appendChild(filmCard.render());
+
+    popupComponent.onSubmit = (updatedData) => {
+      filmData._comments = updatedData.comments;
+      filmData._userRating = updatedData.userRating;
+      filmData._isFavorite = updatedData.isFavorite;
+      filmData._isWatched = updatedData.isWatched;
+      filmData._isInWatchList = updatedData.isInWatchList;
+
+      filmComponent.update(filmData);
+    };
+
+    fragment.appendChild(filmComponent.render());
   }
+  dist.appendChild(fragment);
 };
 
-
-renderFilms(filmsMainContainer, listOfMainFilms);
-renderFilms(filmsTopRated, listOfTopRatedFilms);
-renderFilms(filmsMostComment, listOfMostCommentFilms);
-
-
-function open(e) {
-  const opened = filterContainer.querySelector(`.main-navigation__item--active`);
-  if (e.target.classList.contains(`main-navigation__item`)) {
-    if (!isOpened) {
-      e.target.classList.add(`main-navigation__item--active`);
-      isOpened = true;
-      renderFilmCards(filmsMainContainer, random(7), makeMainCard);
-    }
-    if (opened !== e.target) {
-      opened.classList.remove(`main-navigation__item--active`);
-      e.target.classList.add(`main-navigation__item--active`);
-      isOpened = true;
-      renderFilmCards(filmsMainContainer, random(7), makeMainCard);
-    } else if (opened === e.target) {
-      e.target.classList.remove(`main-navigation__item--active`);
-      isOpened = false;
-    }
-  }
-}
+// function open(e) {
+//   const opened = filterContainer.querySelector(`.main-navigation__item--active`);
+//   if (e.target.classList.contains(`main-navigation__item`)) {
+//     if (!isOpened) {
+//       e.target.classList.add(`main-navigation__item--active`);
+//       isOpened = true;
+//       renderFilmCards(filmsMainContainer, random(7), makeMainCard);
+//     }
+//     if (opened !== e.target) {
+//       opened.classList.remove(`main-navigation__item--active`);
+//       e.target.classList.add(`main-navigation__item--active`);
+//       isOpened = true;
+//       renderFilmCards(filmsMainContainer, random(7), makeMainCard);
+//     } else if (opened === e.target) {
+//       e.target.classList.remove(`main-navigation__item--active`);
+//       isOpened = false;
+//     }
+//   }
+// }
 
 filterContainer.insertAdjacentHTML(`afterbegin`, makeFilter(`History`, true, 6));
 filterContainer.insertAdjacentHTML(`afterbegin`, makeFilter(`Favorites`, true, 4));
@@ -74,3 +73,7 @@ filterContainer.insertAdjacentHTML(`afterbegin`, makeFilter(`All`));
 
 
 filterContainer.addEventListener(`click`, open);
+
+renderFilmCards(7, filmsMainContainer);
+renderFilmCards(2, filmsTopRated, true);
+renderFilmCards(3, filmsMostComment, true);
