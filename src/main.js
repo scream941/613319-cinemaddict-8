@@ -1,4 +1,5 @@
 import {filmsData} from './filmData.js';
+import {drawStat} from './statistic.js';
 import Filter from './Filter.js';
 import FilmCard from './FilmCard.js';
 import Popup from './Popup.js';
@@ -63,6 +64,8 @@ const filmsList = document.querySelector(`.films-list`);
 const filmsMainContainer = filmsList.querySelector(`.films-list__container`);
 const filmsTopRated = document.querySelector(`section:nth-of-type(2) .films-list__container`);
 const filmsMostComment = document.querySelector(`section:nth-of-type(3) .films-list__container`);
+const statisticContainer = document.querySelector(`.statistic`);
+const films = document.querySelector(`.films`);
 
 const filterFilms = (films, filterName) => {
   switch (filterName) {
@@ -79,6 +82,17 @@ const filterFilms = (films, filterName) => {
   }
 };
 
+const showStatistic = () => {
+  drawStat(initialFilms);
+  statisticContainer.classList.remove(`visually-hidden`);
+  films.classList.add(`visually-hidden`);
+};
+
+const hideStatistic = () => {
+  statisticContainer.classList.add(`visually-hidden`);
+  films.classList.remove(`visually-hidden`);
+};
+
 filmsMainContainer.innerHTML = ``;
 filmsTopRated.innerHTML = ``;
 filmsMostComment.innerHTML = ``;
@@ -91,10 +105,11 @@ const renderFilters = (dataOfFilters) => {
     filterComponent.onFilter = (filter) => {
       if (filter !== `stats`) {
         const filteredFilms = filterFilms(initialFilms, filter);
+        hideStatistic();
         filmsMainContainer.innerHTML = ``;
         filteredFilms.forEach((film) => renderFilmCards(film, filmsMainContainer));
-      } else {
-        return;
+      } else if (filter === `stats`) {
+        showStatistic();
       }
     };
     filterContainer.appendChild(filterComponent.render());
