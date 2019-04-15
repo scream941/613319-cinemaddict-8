@@ -120,7 +120,7 @@ const getRandomRating = () => (Math.random() * (10 - 5) + 5).toFixed(1);
 const getRandomItems = (items, num) => [...items].sort(() => Math.random() - 0.5).slice(0, num);
 
 
-export default () => ({
+export const film = () => ({
   title: getRandomItem(titles),
   rating: getRandomRating(),
   year: moment(`${getRandomInt(1, 12)}-${getRandomInt(1, 30)}-${getRandomInt(1960, 2018)}`, `MM-DD-YYYY`).format(`DD MMMM YYYY`),
@@ -155,3 +155,5 @@ export default () => ({
     }
   ],
 });
+
+export const filmsData = (amount) => [...Array(amount).keys()].map(film);
