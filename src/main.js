@@ -67,18 +67,18 @@ const filmsMostComment = document.querySelector(`section:nth-of-type(3) .films-l
 const statisticContainer = document.querySelector(`.statistic`);
 const films = document.querySelector(`.films`);
 
-const filterFilms = (films, filterName) => {
+const filterFilms = (listOfFilms, filterName) => {
   switch (filterName) {
     case `all`:
-      return films;
+      return listOfFilms;
     case `watchlists`:
-      return films.filter((film) => film.isInWatchList);
+      return listOfFilms.filter((film) => film.isInWatchList);
     case `history`:
-      return films.filter((film) => film.isWatched);
+      return listOfFilms.filter((film) => film.isWatched);
     case `favorites`:
-      return films.filter((film) => film.isFavorite);
+      return listOfFilms.filter((film) => film.isFavorite);
     default:
-      return films;
+      return listOfFilms;
   }
 };
 
@@ -128,10 +128,10 @@ const renderFilmCards = (film, dist, extra) => {
     }
   };
 
+
   filmComponent.onWatchList = () => {
     film.isInWatchList = !film.isInWatchList;
     const filterAmount = filtersData.findIndex((filter) => filter.id === `watchlists`);
-    console.log(filterAmount);
     const filteredFilms = filterFilms(initialFilms, `watchlists`);
     if (!film.isInWatchList) {
       filtersData[filterAmount].amount--;
@@ -171,13 +171,15 @@ const renderFilmCards = (film, dist, extra) => {
   };
 
   popupComponent.onSubmit = (updatedData) => {
-    filmData._comments = updatedData.comments;
-    filmData._userRating = updatedData.userRating;
-    filmData._isFavorite = updatedData.isFavorite;
-    filmData._isWatched = updatedData.isWatched;
-    filmData._isInWatchList = updatedData.isInWatchList;
+    film._comments = updatedData.comments;
+    film._userRating = updatedData.userRating;
+    film._isFavorite = updatedData.isFavorite;
+    film._isWatched = updatedData.isWatched;
+    film._isInWatchList = updatedData.isInWatchList;
 
     filmComponent.update(film);
+    filmsMostComment.innerHTML = ``;
+    sortMostCommentFilms(initialFilms).forEach((film) => renderFilmCards(film, filmsMostComment, true));
   };
 };
 

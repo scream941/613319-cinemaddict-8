@@ -92,7 +92,6 @@ const getStat = (movies) => {
   genresStats.totalDuration = getTotalDuration(filteredMovies);
   genresStats.total = filteredMovies.length;
 
-  console.log(getTotalDuration(filteredMovies));
   return genresStats;
 };
 
