@@ -26,6 +26,13 @@ export default class Component {
   _partialUpdate() {
     this._element.innerHTML = this.template;
   }
+
+  reRender() {
+    this.removeListener();
+    this._partialUpdate();
+    this.setListener();
+  }
+
   update() {}
   setListener() {}
   removeListener() {}

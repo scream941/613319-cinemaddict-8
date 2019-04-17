@@ -1,4 +1,5 @@
 import Component from './Component.js';
+import moment from 'moment';
 
 export default class FilmCard extends Component {
   constructor(data, isExtra = false) {
@@ -79,12 +80,12 @@ export default class FilmCard extends Component {
               <h3 class="film-card__title">${this._title}</h3>
               <p class="film-card__rating">${this._rating}</p>
               <p class="film-card__info">
-                <span class="film-card__year">${this._year.match(/\d{4}/)}</span>
-                <span class="film-card__duration">${this._duration.hour}h&nbsp;${this._duration.min}m</span>
-                <span class="film-card__genre">${this._genre[0]}</span>
+                <span class="film-card__year">${moment(this._year).format(`YYYY`)}</span>
+                <span class="film-card__duration">${moment.utc(moment.duration(this._duration, `minutes`).asMilliseconds()).format(`h[h] m[m]`)}</span>
+                <span class="film-card__genre ${![...this._genre].length ? `visualy-hidden` : ``}">${[...this._genre[0]]}</span>
               </p>
               <img src="./images/posters/${this._picture}.jpg" alt="${this._picture}" class="film-card__poster">
-              <p class="film-card__description">${this._description}</p>
+              <p class="film-card__description ${this._description > 2 ? `` : `visualy-hidden`}">${this._description}</p>
               <button class="film-card__comments">${this._comments.length} comments</button>
               ${!this._isExtra ? `<form class="film-card__controls">
                 <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist"><!--Add to watchlist--> WL</button>
@@ -121,10 +122,13 @@ export default class FilmCard extends Component {
   }
 
   update(data) {
-    this._comments = data.comments;
+    if (data.comments) {
+      this._comments = data.comments;
+    }
     this._isFavorite = data.isFavorite;
     this._isWatched = data.isWatched;
     this._isInWatchList = data.isInWatchList;
+    this._userRating = data.userRating;
 
     this.removeListener();
     this._partialUpdate();
