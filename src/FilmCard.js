@@ -28,7 +28,6 @@ export default class FilmCard extends Component {
     this._onFavoriteButtonClick = this._onFavoriteButtonClick.bind(this);
   }
 
-
   _onCommentsButtonClick() {
     if (typeof this._onComments === `function`) {
       this._onComments();

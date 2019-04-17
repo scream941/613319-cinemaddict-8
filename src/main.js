@@ -108,7 +108,7 @@ const renderFilters = (dataOfFilters) => {
         hideStatistic();
         filmsMainContainer.innerHTML = ``;
         filteredFilms.forEach((film) => renderFilmCards(film, filmsMainContainer));
-      } else if (filter === `stats`) {
+      } else {
         showStatistic();
       }
     };
@@ -127,7 +127,6 @@ const renderFilmCards = (film, dist, extra) => {
       document.body.appendChild(popupComponent.element);
     }
   };
-
 
   filmComponent.onWatchList = () => {
     film.isInWatchList = !film.isInWatchList;

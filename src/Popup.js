@@ -30,6 +30,8 @@ export default class Popup extends Component {
     this._onChangeEmoji = this._onChangeEmoji.bind(this);
     this._onRatingClick = this._onRatingClick.bind(this);
     this._onCommentAdd = this._onCommentAdd.bind(this);
+    this._filmChangeWatched = this._filmChangeWatched.bind(this);
+    this._onFilmDetailControls = this._onFilmDetailControls.bind(this);
   }
 
   _getRatingHtml() {
@@ -93,6 +95,32 @@ export default class Popup extends Component {
 
   _onRatingClick(e) {
     if (e.target.tagName === `INPUT`) {
+
+      const formData = new FormData(this._element.querySelector(`.film-details__inner`));
+      const newData = this._processForm(formData);
+
+      this.removeListener();
+      this.update(newData);
+      this._partialUpdate();
+      this.setListener();
+
+      this._onSubmit(newData);
+    }
+  }
+
+  _filmChangeWatched() {
+    this._element.querySelector(`input[name=watched`).checked = false;
+    this._element.querySelector(`.film-details__watched-status`).classList.remove(`film-details__watched-status--active`);
+  }
+
+  _onFilmDetailControls() {
+    const field = {
+      favorite: `isFavorite`,
+      watched: `isWatched`,
+      toWatchList: `isInWatchList`
+    };
+    if (field) {
+      this[field] = !this[field];
 
       const formData = new FormData(this._element.querySelector(`.film-details__inner`));
       const newData = this._processForm(formData);
@@ -251,6 +279,10 @@ export default class Popup extends Component {
       .addEventListener(`keydown`, this._onCommentAdd);
     this._element.querySelector(`.film-details__emoji-list`)
       .addEventListener(`change`, this._onChangeEmoji);
+    this._element.querySelector(`.film-details__watched-reset`)
+      .addEventListener(`click`, this._filmChangeWatched);
+    this._element.querySelector(`.film-details__controls`)
+      .addEventListener(`change`, this._onFilmDetailControls);
   }
 
   removeListener() {
@@ -262,6 +294,10 @@ export default class Popup extends Component {
       .removeEventListener(`keydown`, this._onCommentAdd);
     this._element.querySelector(`.film-details__emoji-list`)
       .removeEventListener(`change`, this._onChangeEmoji);
+    this._element.querySelector(`.film-details__watched-reset`)
+      .removeEventListener(`click`, this._filmChangeWatched);
+    this._element.querySelector(`.film-details__controls`)
+      .removeEventListener(`change`, this._onFilmDetailControls);
   }
 
   update(data) {
@@ -286,15 +322,24 @@ export default class Popup extends Component {
         if (value === `on`) {
           target.isFavorite = true;
         }
+        if (value === ``) {
+          target.isFavorite = false;
+        }
       },
       'watched': (value) => {
         if (value === `on`) {
           target.isWatched = true;
         }
+        if (value === ``) {
+          target.isWatched = false;
+        }
       },
-      'watchList': (value) => {
+      'watchlist': (value) => {
         if (value === `on`) {
           target.isInWatchList = true;
+        }
+        if (value === ``) {
+          target.isInWatchList = false;
         }
       }
     };
