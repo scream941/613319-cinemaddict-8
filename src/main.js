@@ -1,41 +1,43 @@
-import {filmsData} from './filmData.js';
+// import {filmsData} from './filmData.js';
 import {drawStat} from './statistic.js';
 import Filter from './Filter.js';
 import FilmCard from './FilmCard.js';
 import Popup from './Popup.js';
+import API from './API.js';
 
 const CARDS = 7;
 const EXTRA_CARDS = 2;
+const END_POINT = `https://es8-demo-srv.appspot.com/moowle/`;
+const AUTHORIZATION = `Basic eo0w590ik29889a`;
+const LOADING_ERROR = `Something went wrong while loading movies. Check your connection or try again later`;
 
-const initialFilms = filmsData(CARDS);
-
-const filtersData = [
-  {
-    title: `All movies`,
-    id: `all`,
-    isActive: true,
-  },
-  {
-    title: `Watchlist`,
-    id: `watchlists`,
-    amount: initialFilms.filter((item) => item.isInWatchList).length,
-  },
-  {
-    title: `History`,
-    id: `history`,
-    amount: initialFilms.filter((item) => item.isWatched).length,
-  },
-  {
-    title: `Favorites`,
-    id: `favorites`,
-    amount: initialFilms.filter((item) => item.isFavorite).length
-  },
-  {
-    title: `Stats`,
-    id: `stats`,
-    isAdditional: true,
-  },
-];
+// const filtersData = [
+//   {
+//     title: `All movies`,
+//     id: `all`,
+//     isActive: true,
+//   },
+//   {
+//     title: `Watchlist`,
+//     id: `watchlists`,
+//     amount: initialFilms.filter((item) => item.isInWatchList).length,
+//   },
+//   {
+//     title: `History`,
+//     id: `history`,
+//     amount: initialFilms.filter((item) => item.isWatched).length,
+//   },
+//   {
+//     title: `Favorites`,
+//     id: `favorites`,
+//     amount: initialFilms.filter((item) => item.isFavorite).length
+//   },
+//   {
+//     title: `Stats`,
+//     id: `stats`,
+//     isAdditional: true,
+//   },
+// ];
 
 const sortTopRatedFilms = (topRatedFilms) => {
   topRatedFilms.sort((a, b) => b.rating - a.rating);
@@ -55,10 +57,7 @@ const sortMostCommentFilms = (mostComentFilms) => {
   return sortedMostCommentFilms;
 };
 
-const topRatedFilms = sortTopRatedFilms(initialFilms);
-const mostCommentFilms = sortMostCommentFilms(initialFilms);
-
-
+const filmsAPI = new API({endPoint: END_POINT, authorization: AUTHORIZATION});
 const filterContainer = document.querySelector(`.main-navigation`);
 const filmsList = document.querySelector(`.films-list`);
 const filmsMainContainer = filmsList.querySelector(`.films-list__container`);
@@ -182,7 +181,8 @@ const renderFilmCards = (film, dist, extra) => {
   };
 };
 
-renderFilters(filtersData);
-initialFilms.forEach((film) => renderFilmCards(film, filmsMainContainer));
-topRatedFilms.forEach((film) => renderFilmCards(film, filmsTopRated, true));
-mostCommentFilms.forEach((film) => renderFilmCards(film, filmsMostComment, true));
+// renderFilters(filtersData);
+filmsAPI.getFilms()
+  .then((initialFilms) => {
+    renderFilmCards(initialFilms, filmsMainContainer);
+  });
