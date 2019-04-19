@@ -72,9 +72,9 @@ export default class Popup extends Component {
   _getCommentsTemplate() {
     return this._comments.map((comment) => `
     <li class="film-details__comment">
-      <span class="film-details__comment-emoji">${this._switchEmoji(comment.emoji)}</span>
+      <span class="film-details__comment-emoji">${this._switchEmoji(comment.emotion)}</span>
       <div>
-        <p class="film-details__comment-text">${comment.text}</p>
+        <p class="film-details__comment-text">${comment.comment}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${comment.author}</span>
           <span class="film-details__comment-day">${moment(comment.date).fromNow()}</span>
@@ -213,7 +213,7 @@ export default class Popup extends Component {
         </div>
         <div class="film-details__info-wrap">
           <div class="film-details__poster">
-            <img class="film-details__poster-img" src="images/posters/${this._picture}.jpg" alt="${this._title}">
+            <img class="film-details__poster-img" src="${this._picture}" alt="${this._title}">
             <p class="film-details__age">${this._ageRating}+</p>
           </div>
           <div class="film-details__info">
@@ -246,7 +246,7 @@ export default class Popup extends Component {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${this.duration}m</td>
+                <td class="film-details__cell">${this._duration}m</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
@@ -302,7 +302,7 @@ export default class Popup extends Component {
           </div>
           <div class="film-details__user-score visualy-hidden">
             <div class="film-details__user-rating-poster">
-              <img src="images/posters/${this._picture}.jpg" alt="${this._picture}" class="film-details__user-rating-img">
+              <img src="${this._picture}" alt="${this._title}" class="film-details__user-rating-img">
             </div>
             <section class="film-details__user-rating-inner">
               <h3 class="film-details__user-rating-title">${this._title}</h3>
@@ -422,10 +422,10 @@ export default class Popup extends Component {
   static createMapper(target) {
     return {
       'comment': (value) => {
-        target.comment.text = value;
+        target.comment.comment = value;
       },
       'comment-emoji': (value) => {
-        target.comment.emoji = value;
+        target.comment.emotion = value;
       },
       'score': (value) => {
         target.userRating = value;

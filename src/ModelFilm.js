@@ -1,5 +1,6 @@
 export default class ModelFilm {
   constructor(data) {
+    console.log(data);
     this.id = data[`id`];
     this.title = data[`film_info`][`title`] || ``;
     this.titleOriginal = data[`film_info`][`alternative_title`] || ``;
