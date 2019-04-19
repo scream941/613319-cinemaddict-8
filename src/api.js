@@ -36,7 +36,7 @@ export default class API {
       url: `movies/${id}`,
       method: Method.PUT,
       body: JSON.stringify(data),
-      headers: new Headers({'Content-Type': `aplication/json`})
+      headers: new Headers({'Content-Type': `application/json`})
     }).then(toJSON)
       .then(ModelFilm.parseFilm);
   }

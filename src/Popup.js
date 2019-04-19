@@ -41,7 +41,7 @@ export default class Popup extends Component {
     this._onChangeEmoji = this._onChangeEmoji.bind(this);
     this._onRatingClick = this._onRatingClick.bind(this);
     this._onCommentAdd = this._onCommentAdd.bind(this);
-    this._onFilmChangeWatched = this._filmChangeWatched.bind(this);
+    this._onFilmChangeWatched = this._onFilmChangeWatched.bind(this);
     this._onWatchlistClick = this._onWatchlistClick.bind(this);
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
     this._onWatchedClick = this._onWatchedClick.bind(this);
@@ -193,16 +193,16 @@ export default class Popup extends Component {
     this._onComment = fn;
   }
 
-  set onWatchlistClick(fn) {
-    this._onWatchlistClick = fn;
+  set onWatchlist(fn) {
+    this._onWatchlist = fn;
   }
 
-  set onFavoriteClick(fn) {
-    this._onFavoriteClick = fn;
+  set onFavorite(fn) {
+    this._onFavorite = fn;
   }
 
-  set onWatchedClick(fn) {
-    this._onWatchedClick = fn;
+  set onWatched(fn) {
+    this._onWatched = fn;
   }
 
   get template() {
@@ -252,7 +252,7 @@ export default class Popup extends Component {
                 <td class="film-details__term">Country</td>
                 <td class="film-details__cell">${this._country}</td>
               </tr>
-              <tr class="film-details__row ${![...this.genre].length ? `visually-hidden` : ``}">
+              <tr class="film-details__row ">
                 <td class="film-details__term">Genres</td>
                 <td class="film-details__cell">
                 ${[...this._genre].map((genre) => `

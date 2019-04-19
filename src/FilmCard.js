@@ -82,7 +82,7 @@ export default class FilmCard extends Component {
               <p class="film-card__info">
                 <span class="film-card__year">${moment(this._year).format(`YYYY`)}</span>
                 <span class="film-card__duration">${moment.utc(moment.duration(this._duration, `minutes`).asMilliseconds()).format(`h[h] m[m]`)}</span>
-                <span class="film-card__genre ${![...this._genre].length ? `visualy-hidden` : ``}">${[...this._genre[0]]}</span>
+                <span class="film-card__genre ${![...this._genre].length ? `visualy-hidden` : ``}">${[...this._genre][0]}</span>
               </p>
               <img src="./images/posters/${this._picture}.jpg" alt="${this._picture}" class="film-card__poster">
               <p class="film-card__description ${this._description > 2 ? `` : `visualy-hidden`}">${this._description}</p>
